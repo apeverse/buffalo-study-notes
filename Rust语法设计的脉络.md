@@ -28,13 +28,19 @@ Rust作为一门功能齐全，性能强悍的系统编程语言，自然也不�
 
 > Data的Type，语言自带的，就是基础性的、原子性的数据类型(Primitive)，比如(u8、i64、bool)；可自定义的，主要是(struct、enum、tuple)，可称之为复合数据类型(Complex)，Rust标准库自带的(array、vector、string、slice、str)等类型，是通过struct实现的。
 
-> function是用来操作数据的，当用impl关键词和complex类型建立关联时，就是面向对象编程思想的自然表达。将complex data的「self指针」设定为function的第一个参数，就能将data与function绑定在一起，以完成对象与方法的结合调用。面向对象编程的四大核心概念是：抽象、封装、继承、多态，struct、enum实现了简单而富有表达力的抽象与封装，impl、trait则实现了自由灵活的继承与多态。
+> Function用于操作数据，当用（impl关键词）与（Complex类型）建立关联时，就是面向对象编程思想的自然表达。将Complex Data的（self指针）设定为Function的第一个参数，则将Data与function绑定在一起，以此完成对象与方法的结合调用。
 
-> function的集合，也就是一组接口定义，被称为「品格trait」，同样采用impl和primitive、complex 类型挂接起来。当我们创建「trait object」时，实际上是创建了「一对指针」，一个指向数据对象，另一个指向函数列表，trait object像胶水一样把一组function和data粘合绑定在一起。这是一种非常松散的耦合关系，给程序设计者带来了很高的灵活性，可很容易针对primitive类型（而不仅仅是complex类型），设计和使用trait。
+> 面向对象编程的四大核心概念是：抽象、封装、继承、多态，struct、enum实现了简单而富有表达力的抽象、封装，impl、trait则实现了自由灵活的继承、多态。
 
-> trait可以和任意type的data绑定，为了让trait所包含的function接口定义更灵活，又引入了Self关键词，用于指定function的返回值type，比如：fn funcx() -> Self，则foo.funcx()的返回值类型就会与foo的类型保持一致。用最少的源代码表达完整的意图、做尽可能多的事，把这种思想继续发挥下去，「泛型generic」就出现了。
+> Function的集合（一组接口定义）被称为（品格trait），同样采用impl和Primitive、Complex 类型挂接起来。
 
-> complex type、function、trait在定义的时候，都可额外引入「类型参数」，这就形成了较为通用的数据模版、函数模版、品格模版，以实现用一套「描述代码」，按需编译生成多套「目标代码」。
+> 当我们创建（trait object）时，实际上是创建了（一对指针），一个指向数据对象，另一个指向函数列表，（trait object）像胶水一样把一组Function和data粘合绑定在一起。这是一种非常松散的耦合关系，为编程带来了高度的灵活性，可很容易针对Primitive类型（而不仅仅是Complex类型）设计和使用trait。
+
+> trait可以和任意Type的Data绑定，为了让trait所包含的Function接口定义更灵活，又引入了Self关键词，用于指定Function的返回值Type，比如：fn funcx() -> Self，则foo.funcx()的返回值类型就会与foo的类型保持一致。
+
+> 用最少的源代码表达完整的意图、做尽可能多的事，把这种思想继续发挥下去，（泛型Generic）就出现了。
+
+> Complex Type、Function、trait在定义的时候，都可额外引入（类型参数），这就形成了较为通用的数据模版、函数模版、品格模版，以实现用一套（描述代码）按需编译生成多套（目标代码）。
 
 > struct的功能是组合性的多个、多种数据的集结，而enum的功能是排他性的、唯一性相关的数据的抉择。Rust的enum，像是借鉴并揉合了C语言的union和enum，但远远扩展了它们的功能到令人惊叹的地步，让人不得不佩服其设计者，真是才华横溢得满地流淌。举个例子：
 
