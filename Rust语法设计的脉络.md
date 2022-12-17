@@ -54,12 +54,13 @@ Rust作为一门功能齐全，性能强悍的系统编程语言，自然也不�
 
 > Result中的Ok表示（正确），Ok(T)表示正确的结果，是一个tuple，包含着T类型的Data、Value；类似的，Err表示（错误），Err(E)表示错误的结果，是一个tuple，包含着E类型的错误信息指示数据。
 
-> 用Option<&T>可彻底消除访问空指针带来的段错误（Segment-Fault）。因为Option<&T>的值要么是None，要么是Some(r)，而在Rust中，任何引用/指针r必然指向一个实际存在的value，这种语法特性强行要求程序员在编程时必须判断一个指针是否为None，访问空指针的问题根本就不存在。
+> 用Option<&T>可彻底消除访问空指针带来的段错误（Segment-Fault）。因为Option<&T>的值要么是None，要么是Some(r)，而在Rust中，任何（引用/指针 r）必然指向一个实际存在的value，这种语法特性强行要求程序员在编程时必须判断一个指针是否为None，访问空指针的问题根本不存在。
 
-> 我们知道C语言中的union成员共享同一份存储空间，Rust的enum也一样。但若不同的成员size差别过大，系统就需要按照所有成员中的最大size分配存储空间，如何解决这类问题呢？这时就要用到「Box」打包工具。举一个二叉树的例子：TreeNode<T>的size可能特别大，而Box则返回「heap存储空间」的指针，其size很小，在enum类型定义中，用Box类型代替个别成员的原初类型，可以碾平不同成员之间的size差距，这个设计技巧，也适用于其他「container容器类型」，比如array、vector等容器，其实际包含的内容，可以是value对象的指针，而不是value对象本身。
+> C语言中的union成员共享同一份存储空间，Rust的enum也一样。但若不同成员size差别过大，系统就需要按照所有成员中的最大size分配存储空间，如何解决这类问题呢？这时就要用到（Box打包工具）。
 
+> 举一个二叉树的例子：TreeNode<T>的size可能特别大，而Box则返回size很小的(heap存储空间的指针)，在enum类型定义中，用Box类型代替个别成员的原初类型，则可碾平不同成员之间的size差距，这个设计技巧，也适用于其他（Container容器类型)，比如（array、vector）等容器实际包含的内容，可以是value对象的指针，而不是value对象本身。
 
-> 再举一个Box的例子：编译returns_closure1会报错，因为编译器必须知道函数返回值的固定size，而「Fn(i32) -> i32」的size是不确定的，returns_closure2将返回值用Box打包，则可正常编译通过。
+> 再举一个Box的例子：编译returns_closure1会报错，因为编译器必须知道函数返回值的固定size，而[ Fn(i32) -> i32 ]的size是不确定的，returns_closure2将返回值用Box打包，则可正常编译通过。
 
 > 在Rust中，任何value都必须有一个容器，可称其为owner，即：任何value都是有主人的，这样才可以有效地实行生命周期管理，并及时执行垃圾回收功能。
 
