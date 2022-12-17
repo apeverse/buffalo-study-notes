@@ -62,7 +62,7 @@ enum Result<T, E> {
 }
 ```
 
-> Option中的None表示（无），不包含任何数据的变量，很神奇吧？Some表示（有），有什么呢？有一个T类型的data。
+> Option中的None表示（无），不包含任何数据的变量，很神奇吧？Some表示（有），有什么呢？有一个T类型的Data。
 
 > Result中的Ok表示（正确），Ok(T)表示正确的结果，是一个tuple，包含着T类型的Data、Value；类似的，Err表示（错误），Err(E)表示错误的结果，是一个tuple，包含着E类型的错误信息指示数据。
 
@@ -97,19 +97,19 @@ fn returns_closure2() -> Box<dyn Fn(i32) -> i32> {
 }
 ```
 
-> 在Rust中，任何value都必须有一个容器，可称其为owner，即：任何value都有主人，这样才可有效实行生命周期管理，并及时执行垃圾回收。
+> 在Rust中，任何Value都必须有一个容器，可称其为Owner，即：任何Value都有主人，这样才可有效实行生命周期管理，并及时执行垃圾回收。
 
 > 在C、C++中，程序员需手动管理Heap内存空间的分配与释放，这绝对是一件听起来平淡无奇、做起来全是Bug的事情（Null Pointers、Dangling Pointers、Double Frees、Memory Leaks...），多线程并发模型更是特别放大了这些Bug的危害性。所以Java、Go中自带了垃圾回收器，为程序员节约大量精力，并让程序变得更加安全健壮。不过这有代价：编译后的可执行程序或执行环境必须内嵌垃圾回收线程，让程序size变大，并在运行时出现间歇性卡顿现象，因为需要让渡一部分时空资源用于间歇性地执行垃圾回收器程序。
 
-> Rust则独辟蹊径，走出了一条与众不同的内存空间管理路线，即不需要手动分配与释放，也不需要内嵌垃圾回收器，而是在编译源代码时，透彻地分析每一个value及其owner的生命周期，且单个value只能被单个owner独自拥有，当进程控制流跳出owner的scope作用域时，owner和value就会被立即drop掉，并回收其占据的所有资源（不仅仅是存储空间）。这是一件听来容易，做起艰难的事情，必须对核心语法做全新设计才可能做到，要不然其他编程语言早就这么干了。有些程序员（比如我）刚开始听说这一特性的时候，估计会在内心质疑一下：“扯淡，不可能”，这是典型的思维定势。Rust给我的教训就是不要轻易说不可能，自己认为不可能的事情，别人可能做得灿烂又辉煌。因为无论是一个人，还是一门编程语言，若不改变底层构造，其外在表现也很难有特别突出的地方。
+> Rust则独辟蹊径，走出了一条与众不同的内存空间管理路线，即不需要手动分配与释放，也不需要内嵌垃圾回收器，而是在编译源代码时，透彻地分析每一个Value及其Owner的生命周期，且单个Value只能被单个Owner独自拥有，当进程控制流跳出Owner的Scope作用域时，Owner和Value就会被立即Drop掉，并回收其占据的所有资源（不仅仅是存储空间）。这是一件听来容易，做起艰难的事情，必须对核心语法做全新设计才可能做到，要不然其他编程语言早就这么干了。有些程序员（比如我）刚开始听说这一特性的时候，估计会在内心质疑一下：“扯淡，不可能”，这是典型的思维定势。Rust给我的教训就是不要轻易说不可能，自己认为不可能的事情，别人可能做得灿烂又辉煌。因为无论是一个人，还是一门编程语言，若不改变底层构造，其外在表现也很难有特别突出的地方。
 
-> 变量variable这个词在Rust中，其含义比较模糊，因为variable实际上是owner和value的结合体，变量的名字，可以被视为owner，变量的内容，可以被视为value，而复合型value本身又可以（包含、拥有）多个其他value或value的指针，成为其他value的owner。拥有与被拥有的关系追根溯源必然是一个树状结构（Ownership-Tree），而树根则必然是某个variable。Rust的Ownership设计，比C++程序中value之间潜在的任意图状关系更简单、更清晰、更有条理。
+> 变量Variable这个词在Rust中，其含义比较模糊，因为Variable实际上是Owner和Value的结合体，变量的名字，可以被视为Owner，变量的内容，可以被视为Value，而Complex Value本身又可以（包含、拥有）多个其他Value或Value的指针，成为其他Value的Owner。拥有与被拥有的关系追根溯源必然是一个树状结构（Ownership-Tree），而树根则必然是某个Variable。Rust的Ownership设计，比C++程序中Value之间潜在的任意图状关系更简单、更清晰、更有条理。
 
-> 由于单个value只能被单个owner独自拥有，若需和其他owner分享value，要么（move转移），要么（borrow借用）。若move，则原先的owner将被drop掉，或被标记重置为（未初始化的不可用状态），若borrow，则将value引用/指针传递给新的owner，但用完之后必须将value归还给原owner。新的owner被drop之后，Rust会自动完成value归还动作，就是说，在borrow情况下，新owner不会比原owner活得更久，value的引用/指针不会比value本身活得更久，这就是Rust的Lifetime生命周期设计，可简记为：（r <= &v <= v）。千万不要小看这个简记方式，其能够发挥的威力非常强大。
+> 由于单个Value只能被单个Owner独自拥有，若需和其他Owner分享Value，要么（Move转移），要么（Borrow借用）。若Move，则原先的Owner将被Drop掉，或被标记重置为（未初始化的不可用状态），若Borrow，则将Value引用/指针传递给新的Owner，但用完之后必须将Value归还给原Owner。新的Owner被Drop之后，Rust会自动完成Value归还动作，就是说，在Borrow情况下，新Owner不会比原Owner活得更久，Value的引用/指针不会比Value本身活得更久，这就是Rust的Lifetime生命周期设计，可简记为：（r <= &v <= v）。千万不要小看这个简记方式，其能够发挥的威力非常强大。
 
-> 有两种borrow的方式：sharing/read-only只读可共享、mutable可改写。
+> 有两种Borrow的方式：Sharing/Read-Only只读可共享、Mutable可改写。
 
-> Rust编译器非常智能，能让编译器做的，一定不要手动去做，能在编译时确定的事情，一定不要放在运行时确定。
+> Rust编译器非常智能，能让编译器做的，尽量不要手动去做，能在编译时确定的事情，尽量不要放在运行时确定。
 
 参考材料：
 - O’Reilly螃蟹书《Programming Rust》。
