@@ -14,6 +14,8 @@ Rust作为一门功能齐全，性能强悍的系统编程语言，自然也不�
 
 任何编程语言的设计特征，必然会反应其设计者的世界观，以及如何审视现实世界的底层构造。所以在学习和理解Rust时，可将自己想象成一个编程语言设计者，站在设计者的角度去思考，更有代入感、更容易总结出语法设计的脉络主线：
 
+> Process（Runtime of Program），进程是程序的运行时，涉及环境变量、动态库装载、内存布局、信号处理、网络通信、进程间通信、生成子进程、与OS交互等多方面内容
+
 > 程序由什么构成？「代码code」 与 「数据data」，严格来说，code也是data，而data也可以是code。
 
 > data通常又被称为「对象object」或「值value」，在不同的语境下，会使用不同的名字。
@@ -63,16 +65,16 @@ Rust作为一门功能齐全，性能强悍的系统编程语言，自然也不�
 > Rust编译器非常智能，能让编译器做的，一定不要手动去做，能在编译时确定的事情，一定不要放在运行时确定。
 
 参考材料：
-O’Reilly螃蟹书《Programming Rust》。
-Rust官方教材《The Rust Programming Language》。
-rustup docs --book  ##it will open the book in web browser.
+- O’Reilly螃蟹书《Programming Rust》。
+- Rust官方教材《The Rust Programming Language》。
+- rustup docs --book  ##it will open the book in web browser.
 
 未完，待续。。。草稿阶段：
 
-有品（trait）无类（class），而此类（class）非彼类（type）。
-关联Trait，Where，SQL
-一切皆定语，一切皆修饰，一切皆描述。
-Process: Runtime of Program，进程是程序的运行时，涉及环境变量、动态库装载、内存布局、信号处理、网络通信、进程间通信、生成子进程、与OS交互等多方面内容。
+- 有品（trait）无类（class），而此类（class）非彼类（type）
+- 关联Trait，Where，SQL
+- 一切皆定语，一切皆修饰，一切皆描述
+
 
 
 
