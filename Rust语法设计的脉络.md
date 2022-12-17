@@ -70,7 +70,7 @@ enum Result<T, E> {
 
 > C语言中的union成员共享同一份存储空间，Rust的enum也一样。但若不同成员size差别过大，系统就需要按照所有成员中的最大size分配存储空间，如何解决这类问题呢？这时就要用到（Box打包工具）。
 
-> 举一个二叉树的例子：TreeNode<T>的size可能特别大，而Box则返回size很小的(heap存储空间的指针)，在enum类型定义中，用Box类型代替个别成员的原初类型，则可碾平不同成员之间的size差距，这个设计技巧，也适用于其他（Container容器类型)，比如（array、vector）等容器实际包含的内容，可以是value对象的指针，而不是value对象本身。
+> 举一个二叉树的例子：TreeNode<T>的size可能特别大，而Box则返回size很小的(Heap存储空间的指针)，在enum类型定义中，用Box类型代替个别成员的原初类型，则可碾平不同成员之间的size差距，这个设计技巧，也适用于其他（Container容器类型)，比如（array、vector）等容器实际包含的内容，可以是value对象的指针，而不是value对象本身。
 
 ```rust
 struct TreeNode<T> {
@@ -85,7 +85,7 @@ enum BinaryTree<T> {
 }
 ```
 
-> 再举一个Box的例子：编译returns_closure1会报错，因为编译器必须知道函数返回值的固定size，而[ Fn(i32) -> i32 ]的size是不确定的，returns_closure2将返回值用Box打包，则可正常编译通过。
+> 再举一个Box的例子：编译returns_closure1会报错，因为编译器必须知道函数返回值的固定size，但（ Fn(i32) -> i32 ）的size不确定；returns_closure2的返回值用Box打包，则可正常编译通过。
 
 ```rust
 fn returns_closure1() -> Fn(i32) -> i32 {
@@ -97,16 +97,15 @@ fn returns_closure2() -> Box<dyn Fn(i32) -> i32> {
 }
 ```
 
-> 在Rust中，任何value都必须有一个容器，可称其为owner，即：任何value都是有主人的，这样才可以有效地实行生命周期管理，并及时执行垃圾回收功能。
+> 在Rust中，任何value都必须有一个容器，可称其为owner，即：任何value都有主人，这样才可有效实行生命周期管理，并及时执行垃圾回收。
 
-> 在C、C++中，程序员需手动管理heap内存空间的分配与释放，这绝对是一件听起来平淡无奇、做起来全是bug的事情（null pointers、dangling pointers、double frees、memory leaks...），多线程并发模型更是特别放大了这些bug的危害性。所以Java、Go中自带了垃圾回收器，为程序员节约了大量精力，也让程序变得更加健壮安全。不过这是有代价的：编译后的可执行程序或执行环境必须内嵌垃圾回收器程序，程序size变大了，在程序运行时也会出现间歇性的卡顿现象，因为必须间歇性地让出一部分时空资源用于执行垃圾回收器程序。
+> 在C、C++中，程序员需手动管理Heap内存空间的分配与释放，这绝对是一件听起来平淡无奇、做起来全是Bug的事情（Null Pointers、Dangling Pointers、Double Frees、Memory Leaks...），多线程并发模型更是特别放大了这些Bug的危害性。所以Java、Go中自带了垃圾回收器，为程序员节约大量精力，并让程序变得更加安全健壮。不过这有代价：编译后的可执行程序或执行环境必须内嵌垃圾回收线程，让程序size变大，并在运行时出现间歇性卡顿现象，因为需要间歇性地让渡一部分时空资源用于执行垃圾回收器程序。
 
-> Rust则独辟蹊径，走出了一条与众不同的内存空间管理路线，即不需要手动分配与释放，也不需要内嵌垃圾回收器，而是在编译源代码时，透彻地分析每一个value及其owner的生命周期，且单个value只能被单个owner独自拥有，所以当进程控制流跳出owner的scope作用域时，owner和value就会被立即drop掉，并回收其占据的所有资源（不仅仅是存储空间）。这是一件听起来容易，做起艰难的事情，必须对语言的核心语法做全新的设计才可能做到，要不然其他编程语言早就这么干了。有些程序员刚听说这一特性的时候，估计会在内心质疑一下：“扯淡，不可能”，比如我，这是典型的思维定势。Rust给我的教训就是不要轻易说不可能，自己认为不可能的事情，别人可能做得灿烂又辉煌。无论是一个人，还是一门编程语言，若不改变底层的构造，其外在表现也很难有特别突出的地方。
+> Rust则独辟蹊径，走出了一条与众不同的内存空间管理路线，即不需要手动分配与释放，也不需要内嵌垃圾回收器，而是在编译源代码时，透彻地分析每一个value及其owner的生命周期，且单个value只能被单个owner独自拥有，当进程控制流跳出owner的scope作用域时，owner和value就会被立即drop掉，并回收其占据的所有资源（不仅仅是存储空间）。这是一件听起来容易，做起艰难的事情，必须对语言的核心语法做全新的设计才可能做到，要不然其他编程语言早就这么干了。有些程序员（比如我）刚开始听说这一特性的时候，估计会在内心质疑一下：“扯淡，不可能”，这是典型的思维定势。Rust给我的教训就是不要轻易说不可能，自己认为不可能的事情，别人可能做得灿烂又辉煌。因为无论是一个人，还是一门编程语言，若不改变底层构造，其外在表现也很难有特别突出的地方。
 
-> 变量variable这个词在Rust中，其含义比较模糊，因为variable实际上是owner和value的结合体，变量的名字，可以被视为owner，变量的内容，可以被视为value，而复合型value本身又可以包含（拥有）多个其他value或value的指针，成为其他value的owner。拥有与被拥有的关系追根溯源必然是一个树状结构（Ownership-Tree），而树根则必然是某个variable。Rust的Ownership设计，比C++程序中value之间潜在的任意图状关系更简单、更清晰、更有条理。
+> 变量variable这个词在Rust中，其含义比较模糊，因为variable实际上是owner和value的结合体，变量的名字，可以被视为owner，变量的内容，可以被视为value，而复合型value本身又可以（包含、拥有）多个其他value或value的指针，成为其他value的owner。拥有与被拥有的关系追根溯源必然是一个树状结构（Ownership-Tree），而树根则必然是某个variable。Rust的Ownership设计，比C++程序中value之间潜在的任意图状关系更简单、更清晰、更有条理。
 
-> 由于单个value只能被单个owner独自拥有，若需和其他owner分享value，要么「move转移」，要么「borrow借用」。若move，则原先的owner将被drop掉，或被标记重置为「未初始化不可用状态」，若borrow，则将value引用/指针传递给新的owner，但用完之后，必须将value归还给原owner。新的owner被drop掉之后，Rust会自动完成value的归还动作，就是说，在borrow的情况下，新的owner不会比原先的owner活得更久，value的引用/指针不会比value本身活得更久，这就是Rust的Lifetime生命周期设计，可简记为：「r <= &v <= v」。千万不要小看这个简记方式，其能够发挥的威力非常强大。
-
+> 由于单个value只能被单个owner独自拥有，若需和其他owner分享value，要么（move转移），要么（borrow借用）。若move，则原先的owner将被drop掉，或被标记重置为（未初始化的不可用状态），若borrow，则将value引用/指针传递给新的owner，但用完之后必须将value归还给原owner。新的owner被drop之后，Rust会自动完成value归还动作，就是说，在borrow情况下，新owner不会比原owner活得更久，value的引用/指针不会比value本身活得更久，这就是Rust的Lifetime生命周期设计，可简记为：（r <= &v <= v）。千万不要小看这个简记方式，其能够发挥的威力非常强大。
 
 > 有两种borrow的方式：sharing/read-only只读可共享、mutable可改写。
 
