@@ -16,17 +16,17 @@ Rust作为一门功能齐全，性能强悍的系统编程语言，自然也不�
 
 > Process（Runtime of Program），进程是程序的运行时，涉及环境变量、动态库装载、内存布局、信号处理、网络通信、进程间通信、生成子进程、与OS交互等多方面内容。代码、数据、通信、环境，四个要素，定义了一个进程。
 
-> 或许可以这么思考：无极（程序）=> 太极（进程）=> 两仪（代码、数据）=> 四象（代码、数据、通信、环境）。
+> 或许可以这么看：无极（程序）=> 太极（进程）=> 两仪（代码、数据）=> 四象（代码、数据、通信、环境）。
 
-> 程序由什么构成？「代码code」 与 「数据data」，严格来说，code也是data，而data也可以是code。
+> 程序由什么构成？（代码Code）与（数据Data），Code是Data，而Data也可以是Code。
 
-> data通常又被称为「对象object」或「值value」，在不同的语境下，会使用不同的名字。
+> Data通常又被称为（对象Object）或（值Value），不同语境下会有不同的称呼。
 
-> code与data，其实都有「类型type」。
+> Code与Data，都有(类型Type)。
 
-> code的type，语言自带的，就是「运算符operator」，比如：加+、减-、乘*、除/、余%；我们可自定义的，主要是「函数function」与「闭包closure」。而closure，有时候也被认为是data，可以很方便地传递。
+> Code的Type，语言自带的，就是「运算符Operator」，比如：(加+)、(减-)、(乘*)、(除/)、(余%)；可自定义的，主要是(函数Function)与(闭包Closure)，而Closure，有时候也被认为是Data，可以很方便地传递。
 
-> data的type，语言自带的，就是基础性的、原子性的数据类型「primitive」，比如u8、i64、bool，我们可自定义的，主要是「struct」、「enum」、「tuple」，可称之为复合数据类型「complex」。rust标准库自带的「array」、「vector」、「string」、「slice」、「str」等类型，是通过struct实现的。
+> Data的Type，语言自带的，就是基础性的、原子性的数据类型(Primitive)，比如(u8、i64、bool)；可自定义的，主要是(struct、enum、tuple)，可称之为复合数据类型(Complex)，Rust标准库自带的(array、vector、string、slice、str)等类型，是通过struct实现的。
 
 > function是用来操作数据的，当用impl关键词和complex类型建立关联时，就是面向对象编程思想的自然表达。将complex data的「self指针」设定为function的第一个参数，就能将data与function绑定在一起，以完成对象与方法的结合调用。面向对象编程的四大核心概念是：抽象、封装、继承、多态，struct、enum实现了简单而富有表达力的抽象与封装，impl、trait则实现了自由灵活的继承与多态。
 
