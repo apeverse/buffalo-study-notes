@@ -50,6 +50,18 @@ Rust作为一门功能齐全，性能强悍的系统编程语言，自然也不�
 
 > Option和Result，都是用enum定义的Complex Type，且使用了Generic泛型定义，T和E是类型参数。由于enum的成员互相排斥，同一时刻只能有一个成员存在，这就恰当地表达了（有与无）、（对与错）（只能二选一）的情景。
 
+```rust
+enum Option<T> {
+    None,
+    Some(T)
+}
+
+enum Result<T, E> {
+    Ok(T),
+    Err(E)
+}
+```
+
 > Option中的None表示（无），不包含任何数据的变量，很神奇吧？Some表示（有），有什么呢？有一个T类型的data。
 
 > Result中的Ok表示（正确），Ok(T)表示正确的结果，是一个tuple，包含着T类型的Data、Value；类似的，Err表示（错误），Err(E)表示错误的结果，是一个tuple，包含着E类型的错误信息指示数据。
@@ -60,7 +72,30 @@ Rust作为一门功能齐全，性能强悍的系统编程语言，自然也不�
 
 > 举一个二叉树的例子：TreeNode<T>的size可能特别大，而Box则返回size很小的(heap存储空间的指针)，在enum类型定义中，用Box类型代替个别成员的原初类型，则可碾平不同成员之间的size差距，这个设计技巧，也适用于其他（Container容器类型)，比如（array、vector）等容器实际包含的内容，可以是value对象的指针，而不是value对象本身。
 
+```rust
+struct TreeNode<T> {
+    Node: T,
+    Left: BinaryTree<T>,
+    Right: BinaryTree<T>
+}
+
+enum BinaryTree<T> {
+    Empty,
+    Root(Box<TreeNode<T>>)
+}
+```
+
 > 再举一个Box的例子：编译returns_closure1会报错，因为编译器必须知道函数返回值的固定size，而[ Fn(i32) -> i32 ]的size是不确定的，returns_closure2将返回值用Box打包，则可正常编译通过。
+
+```rust
+fn returns_closure1() -> Fn(i32) -> i32 {
+    |x| x + 1
+}
+
+fn returns_closure2() -> Box<dyn Fn(i32) -> i32> {
+    Box::new(|x| x + 1)
+}
+```
 
 > 在Rust中，任何value都必须有一个容器，可称其为owner，即：任何value都是有主人的，这样才可以有效地实行生命周期管理，并及时执行垃圾回收功能。
 
