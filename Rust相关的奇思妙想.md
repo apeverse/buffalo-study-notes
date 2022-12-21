@@ -75,7 +75,9 @@ FOO::{
         println!("hello")
     }
 }
+```
 
+```rust
 {
     copy FOO;
     fn hello() {
