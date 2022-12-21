@@ -115,6 +115,7 @@ fn returns_closure2() -> Box<dyn Fn(i32) -> i32> {
 - O’Reilly螃蟹书《Programming Rust》。
 - Rust官方教材《The Rust Programming Language》。
 - rustup docs --book  ##it will open the book in web browser.
+- Rust By Example https://github.com/rust-lang/rust-by-example
 
 未完，待续。。。草稿阶段：
 
