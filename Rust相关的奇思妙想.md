@@ -37,3 +37,70 @@ fn bar(mut i: i32) -> ! {
 }
 ```
 
+我觉得Rust可以新增一个语法，对语句块/Scope进行命名。命名的好处在于，语句块可在源代码的其他位置被引用（相当于自动复制了一份），而不需要手动复制粘贴（又重新写了一遍，费劲，没必要）。
+
+若将
+
+```rust
+{
+	...
+}
+```
+
+改写为
+
+```rust
+{
+	scope FOO;
+	...
+}
+```
+
+则表示此代码块/Scope被命名为FOO
+
+```rust
+FOO {
+	fn hello() {
+	    println!("hello");
+	}
+}
+```
+表示此处包含了整个FOO代码块的内容，并新添加了一个hello函数定义。
+
+或者改写为其他风格的语法
+
+```rust
+FOO::{
+    fn hello() {
+        println!("hello")
+    }
+}
+
+{
+	copy FOO;
+	fn hello() {
+        println!("hello")
+    }
+}
+```
+
+本质上就是在一个地方给代码块起个名字，在另一个地方才能指名要copy那个代码块，并且可在copy之后，添加/删除一些变量定义、函数定义等。
+
+或者采用“#”号注解的方式
+
+```rust
+#[scope(FOO)]
+{
+	...
+}
+
+#[scope_copy(FOO)]
+{
+	fn hello() {
+        println!("hello")
+    }
+}
+```
+
+
+
