@@ -3,9 +3,9 @@
 
 ```rust
 fn main() {
-	//bar(1);
-	foo(1);
-	//bar(1);
+    let i = 1;
+    bar(1);
+    foo(1);
 }
 ```
 
@@ -13,14 +13,13 @@ fn main() {
 
 ```rust
 fn foo(mut i: i32) -> i32 {
-	while true {
+    while true {
        println!("Hello Foo");  
-       if i==3 {  
+       if i == 3 {  
          std::process::exit(1);  
        }
-       i+=1;
- 	}
- 	//i
+       i += 1;
+    }
 }
 ```
 
@@ -28,13 +27,13 @@ fn foo(mut i: i32) -> i32 {
 
 ```rust
 fn bar(mut i: i32) -> ! {
-	loop {
+    loop {
        println!("Hello Bar");  
-       if i==3 {
+       if i == 3 {
          std::process::exit(1);  
        }
-       i+=1;
- 	}
+       i += 1;
+    }
 }
 ```
 
