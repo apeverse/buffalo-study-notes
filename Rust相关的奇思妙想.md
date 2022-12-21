@@ -43,7 +43,7 @@ fn bar(mut i: i32) -> ! {
 
 ```rust
 {
-	...
+    ...
 }
 ```
 
@@ -51,8 +51,8 @@ fn bar(mut i: i32) -> ! {
 
 ```rust
 {
-	scope FOO;
-	...
+    scope FOO;
+    ...
 }
 ```
 
@@ -60,9 +60,9 @@ fn bar(mut i: i32) -> ! {
 
 ```rust
 FOO {
-	fn hello() {
-	    println!("hello");
-	}
+    fn hello() {
+        println!("hello");
+    }
 }
 ```
 表示此处包含了整个FOO代码块的内容，并新添加了一个hello函数定义。
@@ -77,8 +77,8 @@ FOO::{
 }
 
 {
-	copy FOO;
-	fn hello() {
+    copy FOO;
+    fn hello() {
         println!("hello")
     }
 }
@@ -91,12 +91,12 @@ FOO::{
 ```rust
 #[scope(FOO)]
 {
-	...
+    ...
 }
 
 #[scope_copy(FOO)]
 {
-	fn hello() {
+    fn hello() {
         println!("hello")
     }
 }
